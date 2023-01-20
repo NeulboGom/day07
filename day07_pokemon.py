@@ -27,7 +27,7 @@ class Pikachu(Pokemon):
     def attack(self,idx):                       #  자식 클래스 Pikachu의 Override
         print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
 
-pi1 = Pikachu('한지우',"50만 볼트/100만 볼트/번개")
+# pi1 = Pikachu('한지우',"50만 볼트/100만 볼트/번개")
 # pi1.info()
 
 class Ggoboogi(Pokemon):    #inhertance
@@ -45,7 +45,7 @@ class Ggoboogi(Pokemon):    #inhertance
 class Firary(Pokemon):
     def __init__(self,owner, skills):
         super().__init__(owner, skills)
-        self.name = "꼬부기"
+        self.name = "파이리"
         print(f"{self.name}")
 
     def attack(self,idx):                       #  자식 클래스 Ggoboogi의 Override
@@ -54,7 +54,7 @@ class Firary(Pokemon):
 
 while True:
     menu = input("1) 포켓몬 생성 2) 프로그램 종료 : ")
-    if menu == '4':
+    if menu == '2':
         print("프로그램을 종료합니다.")
         break
     elif menu == "1":
