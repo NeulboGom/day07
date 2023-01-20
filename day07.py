@@ -1,70 +1,114 @@
 #  Chapter 10 객체와 클래스
 
-#  Multiple Inheritance - 다중 상속 // 여러 부모 클래스로부터 상속받는 것
+# self == 실행되는 시점의 객체 or
+# class name.function(객체 이름)
 
-# 형태
-# class Mule(Donkey, Horse): -> Donkey, Horse, Animal 순서로 첫 번째, 두 번째, 세 번째 부모 클래스가 정해짐
-#       psss
+# 속성 접근
 
-class Animal:
-    def says(self):
-        return "I speak!"
+# 직접 접근
+'''class Duck:
+    def __int__(self, input_name):
+        self.name = input_name
 
+fowl=Duck("Daffy")
+fowl.name
 
-class Horse(Animal):
-    def says(self):
-        return "Neigh!"
+# 직접 접근:
+fowl.name = "Daphne"
+fowl.name
+'''
 
-class Donkey(Animal):
-    def says(self):
-        return "Hee-Haw"
+# Getter, Setter 메서드 // 캡슐화 - 굳이 외부에 공개할 필요가 없는 것은 감추자 // 약한 결합
+# private으로 선언된 것을 이용할 수 있는 방법.
 
-class Snake(Animal):
-    def says(self):
-        return "Ssss-sss"
+class Duck():
+    def __init__(self, input_name):
+        self.hidden_name = input_name
+    def get_name(self):     #  getter
+        print("Inside the getter")
+        return self.hidden_name
+    def set_name(self, input_name):     #  setter
+        print("Insdie the setter")
+        self.hidden_name = input_name
+    #name=property(get_name,set_name)
 
-class Mule(Donkey,Horse,Snake):
-    pass
+don = Duck("Donald")
+don.get_name()
+don.set_name("Donna")
 
-class Hinny(Snake,Horse,Donkey):
-    pass
-    # def says(self):
-    #     return "버새가 웁니다."
+# 이거 다시 공부해야함 하나도 이해 못하고 제대로 출력도 안됨 - 자습시간 활용
 
-m1=Mule()
-h1=Hinny()
-print(h1.says())            #  Horse 먼저
-print(m1.says())            #  Donkey 먼저
-"""만약 Donkey와 Horse의 says가 전부 없으면 Animal로 감 // 둘 중에 하나만 남으면 하나 남은 걸로 감 // 다만 순서는 위에 적힌 대로"""
+# Class and Object Attribute 클래스와 객체 속성
 
-#Method Resolution Order
-print(Mule.mro())  #  실행하면 부모 순서대로 나옴 / 자기 자신 - 1부모 - 2부모 - 3부모
-print(Hinny.mro())
+class Fruit:
+    color='red'     #Class 속성 // self.머시기는 instance 속성 // self는 객체 명을 위한...
 
-# Mixin 믹스인: 클래스 정의에 부모 클래스를 추가하여 상속 받을 수 있다. 다만 Helper의 목적으로만
-# 다른 상위 클래스와 Method를 공유하지 않음 /
-# Mixin 클래스는 부모클래스가 되지 않으면서 어떤 클래스에서 사용할 수 있는 메소드를 포함하는 클래스입니다.
-# 다시 한번, Mixin은 상속의 개념으로 쓰는 것이 아니라 끼워넣는 개념에 가깝습니다.
-# 믹스인이란 클래스에서 제공해야 하는 추가적인 메서드만 정의하는 작은 클래스를 말합니다.
-# 믹스인 클래스는 자체의 인스턴스 속성(attribute)를 정의하지 않으며 __init__ 생성자를 호출하도록 요구하지 않습니다.
+blueberry=Fruit()
+print(Fruit.color)
+print(blueberry.color)
 
-class PrettyMixin():
-    def time_print(self):
-        import datetime
-        print(datetime.datetime.now())
-    def dump(self):
-        import pprint
-        pprint.pprint(vars(self))
+print('='*60)
 
-class Thing(PrettyMixin):
-    pass
+blueberry.color='blue'
+print(Fruit.color)
+print(blueberry.color)
+# Fruit 의 color를 바꾸면 그 이후에 생성되는 객체들은 바뀐 색으로 지정
 
-t=Thing()
-t.name="Nyarlathoep"
-t.feature="ichor"
-t.age="Eldritch"
-t.gender="Female"
-t.dump()
-t.time_print()
+# Method Type 메서드 타입 // 다시 공부하자
 
 
+
+# Duck typing
+
+
+# *Polymorphism  ex) 도형의 면적을 구하는 함수를 만들고, 삼각형, 사각형, 원에 따라서 알아서 처리, but 도형이여야 함
+
+#도형을 이용한 예제
+
+import math
+
+
+class Shape():
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+    def get_area(self):
+        print("도형의 면적을 출력합니다.")
+
+
+class Circle(Shape):
+    def __init__(self,x,y,radius):
+        super().__init__(x,y)
+        self.radius = radius
+
+    def get_area(self):
+        return math.pi * (self.radius)**2
+
+class Cylinder(Circle):
+    def __init__(self,x,y,radius,height):
+        super().__init__(x,y,radius)
+        self.height = height
+
+    def get_area(self):
+        return super().get_area() * self.height
+
+class Rectangle(Shape):
+    def __init__(self,x,y,width,length):
+        super().__init__(x,y)
+        self.width = width
+        self.length = length
+
+    def get_area(self):
+        return self.width * self.length
+
+
+c1=Circle(100, 100, 10.0)
+c2=Circle(50, 50, 2.0)
+r1=Rectangle(100, 50, 5,2)
+
+print(f"{c1.get_area()} // {c2.get_area()} // {r1.get_area()}")
+print(f"사각형의 좌표는 x = {r1.x}이고, y = {r1.y} 입니다. 면적은 {r1.get_area()} 입니다.")
+print(f"원1의 좌표는 x = {c1.x}이고, y = {c1.y} 입니다. 면적은 {c1.get_area()} 입니다.")
+
+cyl1=Cylinder(100, 100, 10.0,2)
+print(f"원기둥의 좌표는 x = {cyl1.x}이고, y = {cyl1.y} 입니다. 부피는은 {cyl1.get_area()} 입니다.")
