@@ -1,135 +1,70 @@
 #  Chapter 10 객체와 클래스
 
-#  Inheritace
-#  Parent Class, Super Class, Base Class 가 부모 클래스의 여러 명칭
-#  Child Class, Sub Class, Derived Class 가 자식 클래스의 여러 명칭
+#  Multiple Inheritance - 다중 상속 // 여러 부모 클래스로부터 상속받는 것
 
-'''class Car:
+# 형태
+# class Mule(Donkey, Horse): -> Donkey, Horse, Animal 순서로 첫 번째, 두 번째, 세 번째 부모 클래스가 정해짐
+#       psss
+
+class Animal:
+    def says(self):
+        return "I speak!"
+
+
+class Horse(Animal):
+    def says(self):
+        return "Neigh!"
+
+class Donkey(Animal):
+    def says(self):
+        return "Hee-Haw"
+
+class Snake(Animal):
+    def says(self):
+        return "Ssss-sss"
+
+class Mule(Donkey,Horse,Snake):
     pass
 
-class Yugo(Car):
+class Hinny(Snake,Horse,Donkey):
+    pass
+    # def says(self):
+    #     return "버새가 웁니다."
+
+m1=Mule()
+h1=Hinny()
+print(h1.says())            #  Horse 먼저
+print(m1.says())            #  Donkey 먼저
+"""만약 Donkey와 Horse의 says가 전부 없으면 Animal로 감 // 둘 중에 하나만 남으면 하나 남은 걸로 감 // 다만 순서는 위에 적힌 대로"""
+
+#Method Resolution Order
+print(Mule.mro())  #  실행하면 부모 순서대로 나옴 / 자기 자신 - 1부모 - 2부모 - 3부모
+print(Hinny.mro())
+
+# Mixin 믹스인: 클래스 정의에 부모 클래스를 추가하여 상속 받을 수 있다. 다만 Helper의 목적으로만
+# 다른 상위 클래스와 Method를 공유하지 않음 /
+# Mixin 클래스는 부모클래스가 되지 않으면서 어떤 클래스에서 사용할 수 있는 메소드를 포함하는 클래스입니다.
+# 다시 한번, Mixin은 상속의 개념으로 쓰는 것이 아니라 끼워넣는 개념에 가깝습니다.
+# 믹스인이란 클래스에서 제공해야 하는 추가적인 메서드만 정의하는 작은 클래스를 말합니다.
+# 믹스인 클래스는 자체의 인스턴스 속성(attribute)를 정의하지 않으며 __init__ 생성자를 호출하도록 요구하지 않습니다.
+
+class PrettyMixin():
+    def time_print(self):
+        import datetime
+        print(datetime.datetime.now())
+    def dump(self):
+        import pprint
+        pprint.pprint(vars(self))
+
+class Thing(PrettyMixin):
     pass
 
-issubclass(Yugo,Car)        #  부모 자식 관계의 클래스가 맞는지 True False로 반환
-
-class Car():
-    def exclaim(self):  #  method
-        print("I'm a car!")
-
-class Yugo(Car):
-    pass
-
-Car().exclaim()
-Yugo().exclaim()
+t=Thing()
+t.name="Nyarlathoep"
+t.feature="ichor"
+t.age="Eldritch"
+t.gender="Female"
+t.dump()
+t.time_print()
 
 
-
-#  Method Override  부모가 가진 메서드를 자식 클래tm에서 재정의하는 것
-
-class Car():
-    def exclaim(self):  #  method
-        print("I'm a car!")
-
-class Yugo(Car):
-    def exclaim(self):
-        print("I'm a Yugo! Much like a Car, but more Yugo-ish")
-
-Car().exclaim()
-Yugo().exclaim()
-
-print('='*60)
-#  __init__을 포함한 모든 메서드를 오버라이드 할 수 있다.
-
-class Person():
-    def __init__(self, name):
-        self.name = name
-
-
-class MDPerson(Person):
-    def __init__(self,name):
-        self.name = "Doctor " + name
-
-
-class JDPerson(Person):
-    def __init__(self, name):
-        self.name = name + ", Esquire"
-
-
-person=Person("Fudd")
-doctor = MDPerson("Fudd")
-lawyer = JDPerson("Fudd")
-
-print(person.name,doctor.name,lawyer.name)
-
-print('='*60)
-#  메서드 추가하기 - 부모 클래스에 없는 메서드를 자식 클래스에 추가 가능: 부모는 해당 메서드 이용 불가
-
-class Car():
-    def exclaim(self):  #  method
-        print("I'm a car!")
-
-class Yugo(Car):
-    def exclaim(self):
-        print("I'm a Yugo! Much like a Car, but more Yugo-ish")
-    def need_a_push(self):
-        print("A little help here?")
-
-
-# Car().exclaim()
-# Yugo().exclaim()
-# Yugo().need_a_push()
-# Car().need_a_push()
-print('='*60)
-
-'''
-#  super() 부모에게 도움 받기 // Override 사용
-
-class Pokemon:
-    def __init__(self, owner, skills):
-        self.owner = owner
-        self.skills = skills.split('/')
-        print(f"포켓몬 생성:",end=' ')
-
-    def info(self):
-        print(f"{self.owner}의 포켓몬이 사용 가능한 스킬")
-        for skill in self.skills:
-            print(skill)
-
-    # def attack(self,idx):                     #    아래에서 Override 됐기 때문에 그냥 안 써도 될 듯
-    #     print(f"{self.skills[idx]} 공격 시전")
-
-
-class Pikachu(Pokemon):
-    def __init__(self, owner, skills):
-        super().__init__(owner, skills)
-        self.name = "피카츄"
-        print(f"{self.name}")
-
-    def attack(self,idx):                       #  자식 클래스 Pikachu의 Override
-        print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
-
-pi1 = Pikachu('한지우',"50만 볼트/100만 볼트/번개")
-# pi1.info()
-
-class Ggoboogi(Pokemon):    #inhertance
-    def __init__(self,owner, skills):
-        super().__init__(owner, skills)
-        self.name = "꼬부기"
-        print(f"{self.name}")
-
-    def attack(self,idx):                       #  자식 클래스 Ggoboogi의 Override
-        print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
-
-    def swim(self):                     #  Ggoboogi 객체들이 사용할 수 있는 고유 스킬
-        print(f"{self.name}가 수영을 합니다.")
-
-Ggo1=Ggoboogi("오바람", "고속 스핀/거품/몸통박치기/하이드로펌프")
-# Ggo1.info()
-
-pi1.attack(0)
-Ggo1.attack(2)
-
-# p0=Pokemon("아이리스","스피드 스타/아이언 테일/지진/돌떨구기")
-# p0.attack(0)
-Ggo1.swim()
-#pi1.swim()
