@@ -1,63 +1,5 @@
 #  Chapter 10 객체와 클래스
 
-# self == 실행되는 시점의 객체 or
-# class name.function(객체 이름)
-
-# 속성 접근
-
-# 직접 접근
-'''class Duck:
-    def __int__(self, input_name):
-        self.name = input_name
-
-fowl=Duck("Daffy")
-fowl.name
-
-# 직접 접근:
-fowl.name = "Daphne"
-fowl.name
-'''
-
-# Getter, Setter 메서드 // 캡슐화 - 굳이 외부에 공개할 필요가 없는 것은 감추자 // 약한 결합
-# private으로 선언된 것을 이용할 수 있는 방법.
-
-class Duck():
-    def __init__(self, input_name):
-        self.hidden_name = input_name
-    def get_name(self):     #  getter
-        print("Inside the getter")
-        return self.hidden_name
-    def set_name(self, input_name):     #  setter
-        print("Insdie the setter")
-        self.hidden_name = input_name
-    #name=property(get_name,set_name)
-
-don = Duck("Donald")
-don.get_name()
-don.set_name("Donna")
-
-# 이거 다시 공부해야함 하나도 이해 못하고 제대로 출력도 안됨 - 자습시간 활용
-
-# Class and Object Attribute 클래스와 객체 속성
-
-class Fruit:
-    color='red'     #Class 속성 // self.머시기는 instance 속성 // self는 객체 명을 위한...
-
-blueberry=Fruit()
-print(Fruit.color)
-print(blueberry.color)
-
-print('='*60)
-
-blueberry.color='blue'
-print(Fruit.color)
-print(blueberry.color)
-# Fruit 의 color를 바꾸면 그 이후에 생성되는 객체들은 바뀐 색으로 지정
-
-# Method Type 메서드 타입 // 다시 공부하자
-
-
-
 # Duck typing
 
 
@@ -101,14 +43,62 @@ class Rectangle(Shape):
     def get_area(self):
         return self.width * self.length
 
+    def __repr__(self):
+        return f"사각형의 좌표는 x = {self.x}이고, y = {self.y} 입니다. 면적은 {self.get_area()} 입니다."
+
+    def __add__(self, other):
+        return f"길이의 합은 {self.length + other.length}, 넓이는 {self.width + other.width}이고, " \
+               f"면적의 합은 {self.get_area() + other.get_area()}입니다"
+        # return Rectangle(0,0,(self.width + other.width), (self.length + other.length))  #  각 사각형의 길이와 넓이를 합하고 곱해서 나온 면적
+
 
 c1=Circle(100, 100, 10.0)
 c2=Circle(50, 50, 2.0)
 r1=Rectangle(100, 50, 5,2)
+r2=Rectangle(70, 30, 10, 15)
 
-print(f"{c1.get_area()} // {c2.get_area()} // {r1.get_area()}")
-print(f"사각형의 좌표는 x = {r1.x}이고, y = {r1.y} 입니다. 면적은 {r1.get_area()} 입니다.")
-print(f"원1의 좌표는 x = {c1.x}이고, y = {c1.y} 입니다. 면적은 {c1.get_area()} 입니다.")
+print(r1)
+print(r2)
+print(r1+r2)        #  r1.add(r2)인데, + 연산자로 간단하게..
 
-cyl1=Cylinder(100, 100, 10.0,2)
-print(f"원기둥의 좌표는 x = {cyl1.x}이고, y = {cyl1.y} 입니다. 부피는은 {cyl1.get_area()} 입니다.")
+print('='*60)
+
+# Magic Method 매직 메서드
+
+# Magic Method 안 쓰고
+class Word():
+    def __init__(self,text):
+        self.text = text
+
+    def equals(self,word2):
+        return self.text.lower() == word2.text.lower()
+
+a=Word("ace")
+b=Word("ACE")
+c=Word("AcD")
+print(a.equals(b))
+print(a.equals(c))
+print((b.equals(c)))
+
+
+#Magic Method 사용하면 .equals 없이 바로 비교 가능 다만 =가 ==로 바뀌어야 함
+class Word():
+    def __init__(self,text):
+        self.text = text
+
+    def __eq__(self,word2):
+        return self.text.lower() == word2.text.lower()
+
+a=Word("ace")
+b=Word("ACE")
+c=Word("AcD")
+
+print(a==b)
+print(b==c)
+print(a==c)
+
+
+# 나머지 도형의 부피 면적 비교해서 출력하는거 맹가보자
+
+
+#  Aggregation and Composition
