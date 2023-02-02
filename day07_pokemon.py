@@ -58,18 +58,14 @@ while True:
         print("프로그램을 종료합니다.")
         break
     elif menu == "1":
-        pokemon = input("1) 피카츄 2) 꼬북이 3) 파이리")
+        pokemon = input("1) 피카츄 2) 꼬부기 3) 파이리 ")
+        owner = input("이름을 입력해주세요: ")
+        skills = input("사용 가능한 기술 입력('/'로 구분하여 입력):")
         if pokemon == "1":
-            owner = input("이름을 입력해주세요:")
-            skills = input("사용 가능한 기술 입력('/'로 구분하여 입력):")
             p=Pikachu(owner, skills)
         elif pokemon == "2":
-            owner = input("이름을 입력해주세요:")
-            skills = input("사용 가능한 기술 입력('/'로 구분하여 입력):")
             p = Ggoboogi(owner, skills)
         elif pokemon == "3":
-            owner = input("이름을 입력해주세요:")
-            skills = input("사용 가능한 기술 입력('/'로 구분하여 입력):")
             p = Firary(owner, skills)
         else:
             print("포켓몬을 골라주세요.")
