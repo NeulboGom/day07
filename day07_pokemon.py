@@ -1,13 +1,21 @@
+# pokemon game v1.1
+# 중복코드 제거, getter, setter
 #  super() 부모에게 도움 받기 // Override 사용
 
 class Pokemon:
     def __init__(self, owner, skills):
-        self.owner = owner
+        self.hidden_owner = owner
         self.skills = skills.split('/')
         print(f"포켓몬 생성:",end=' ')
 
+    def set_owner(self,owner):
+        self.hidden_owner = owner
+
+    def get_owner(self):
+        return self.hidden_owner
+
     def info(self):
-        print(f"{self.owner}의 포켓몬이 사용 가능한 스킬")
+        print(f"{self.get_owner()}의 포켓몬이 사용 가능한 스킬")
         for idx in range(len(self.skills)):
             print(f"{idx+1} : {self.skills[idx]}")
 
@@ -25,7 +33,7 @@ class Pikachu(Pokemon):
         print(f"{self.name}")
 
     def attack(self,idx):                       #  자식 클래스 Pikachu의 Override
-        print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
+        print(f"{self.get_owner()}의 {self.name}가 {self.skills[idx]} 공격 시전!")
 
 # pi1 = Pikachu('한지우',"50만 볼트/100만 볼트/번개")
 # pi1.info()
@@ -37,7 +45,7 @@ class Ggoboogi(Pokemon):    #inhertance
         print(f"{self.name}")
 
     def attack(self,idx):                       #  자식 클래스 Ggoboogi의 Override
-        print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
+        print(f"{self.get_owner()}의 {self.name}가 {self.skills[idx]} 공격 시전!")
 
     def swim(self):                     #  Ggoboogi 객체들이 사용할 수 있는 고유 스킬
         print(f"{self.name}가 수영을 합니다.")
@@ -49,7 +57,7 @@ class Firary(Pokemon):
         print(f"{self.name}")
 
     def attack(self,idx):                       #  자식 클래스 Ggoboogi의 Override
-        print(f"{self.owner}의 {self.name}가 {self.skills[idx]} 공격 시전!")
+        print(f"{self.get_owner()}의 {self.name}가 {self.skills[idx]} 공격 시전!")
 
 
 while True:
